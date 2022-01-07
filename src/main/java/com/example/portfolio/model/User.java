@@ -40,7 +40,7 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    private User(String bLogin, String bEmail, String bPassword) {
+    public User(String bLogin, String bEmail, String bPassword) {
         this.username = bLogin;
         this.email = bEmail;
         this.password = bPassword;
@@ -72,7 +72,12 @@ public class User {
 
     }
 
-
+    public User(Long id, String login, String email, String password) {
+        this.id = id;
+        this.username = login;
+        this.email = email;
+        this.password = password;
+    }
 
 
 

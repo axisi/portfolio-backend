@@ -1,5 +1,7 @@
 package com.example.portfolio.security;
 
+import com.example.portfolio.security.jwt.AuthEntryPoint;
+import com.example.portfolio.security.jwt.AuthTokenFilter;
 import com.example.portfolio.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    private AuthEntryPoint authEntryPoint;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -52,10 +54,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .exceptionHandling().authenticationEntryPoint(authEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+
                 .antMatchers("/api/test/**").permitAll()
+
+
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
